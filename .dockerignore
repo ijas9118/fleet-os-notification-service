@@ -1,0 +1,59 @@
+# Node modules (installed inside container)
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Build output (if applicable)
+dist
+build
+*.tsbuildinfo
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+logs
+*.log
+*.log.*
+debug.log
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+*.swp
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Tests (optional — include only if not needed in container)
+coverage
+__tests__
+test
+spec
+
+# Cache
+.cache
+.parcel-cache
+.next
+.nuxt
+.svelte-kit
+
+# TypeScript cache
+.tsbuildinfo
+
+# Misc
+*.local
+*.tmp
+tmp/
