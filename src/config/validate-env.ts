@@ -17,10 +17,11 @@ const EnvSchema = z.object({
   // Email Configuration (Gmail with App Password)
   SMTP_HOST: z.string().default("smtp.gmail.com"),
   SMTP_PORT: z.coerce.number().default(587),
-  SMTP_SECURE: z.coerce.boolean().default(false), // false for port 587, true for 465
+  // Fix: z.coerce.boolean() converts "false" to true. We need manual transform.
+  SMTP_SECURE: z.string().default("false").transform(val => val === "true"), // false for port 587, true for 465
   SMTP_USER: z.string(), // Gmail address
   SMTP_PASSWORD: z.string(), // Gmail app password
-  EMAIL_FROM: z.string().default("FleetOS <noreply@fleetos.com>"),
+  EMAIL_FROM: z.string(),
 });
 
 export type env = z.infer<typeof EnvSchema>;

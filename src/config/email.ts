@@ -17,6 +17,15 @@ let transporter: Transporter | null = null;
 
 export function initializeEmailTransporter(): void {
   try {
+    // Log SMTP configuration for debugging (without password)
+    logger.info("Initializing email transporter with config:", {
+      host: env.SMTP_HOST,
+      port: env.SMTP_PORT,
+      secure: env.SMTP_SECURE,
+      user: env.SMTP_USER,
+      passwordLength: env.SMTP_PASSWORD?.length || 0,
+    });
+
     transporter = nodemailer.createTransport({
       host: env.SMTP_HOST,
       port: env.SMTP_PORT,
@@ -24,6 +33,10 @@ export function initializeEmailTransporter(): void {
       auth: {
         user: env.SMTP_USER,
         pass: env.SMTP_PASSWORD,
+      },
+      tls: {
+        // Do not force SSLv3, let valid TLS version be negotiated
+        rejectUnauthorized: false, // For development verification
       },
     });
 
@@ -56,12 +69,22 @@ export async function verifyEmailConnection(): Promise<boolean> {
   }
 
   try {
+    logger.info("Verifying email server connection...");
     await transporter.verify();
     logger.info("✅ Email server connection verified");
     return true;
   }
-  catch (error) {
-    logger.error("❌ Email server connection failed", error);
+  catch (error: any) {
+    logger.error("❌ Email server connection failed", {
+      message: error.message,
+      code: error.code,
+      command: error.command,
+      response: error.response,
+      responseCode: error.responseCode,
+      stack: error.stack,
+      // Serialize entire error for debugging
+      fullError: JSON.stringify(error, Object.getOwnPropertyNames(error)),
+    });
     return false;
   }
 }
