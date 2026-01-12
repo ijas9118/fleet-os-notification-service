@@ -7,7 +7,6 @@ import helmet from "helmet";
 
 import logger from "./config/logger";
 
-
 export default function createApp(): Application {
   const app = express();
 
