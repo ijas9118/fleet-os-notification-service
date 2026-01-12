@@ -28,7 +28,7 @@ export class KafkaConsumerService {
       // Consumer is already connected via connectConsumer() in index.ts
       // No need to connect again here
 
-      const topic = "fleet-os.auth.otp.generated";
+      const topic = "auth-events";
 
       // Ensure topic exists before subscribing
       await this.ensureTopicExists(topic);
@@ -51,7 +51,10 @@ export class KafkaConsumerService {
             key: message.key?.toString(),
           });
 
-          if (topic === "fleet-os.auth.otp.generated") {
+          // Route messages based on event-type header
+          const eventType = message.headers?.["event-type"]?.toString();
+          
+          if (eventType === "auth.otp.generated") {
             await this.otpHandler.handle(payload);
           }
         },
