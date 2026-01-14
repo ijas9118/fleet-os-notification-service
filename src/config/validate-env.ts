@@ -11,6 +11,17 @@ const EnvSchema = z.object({
   SERVICE_NAME: z.string(),
   LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace"]),
   DATABASE_URL: z.string(),
+  // Kafka Configuration
+  KAFKA_BROKER: z.string().default("kafka.infrastructure.svc.cluster.local:9092"),
+  KAFKA_GROUP_ID: z.string().default("notification-service-group"),
+  // Email Configuration (Gmail with App Password)
+  SMTP_HOST: z.string().default("smtp.gmail.com"),
+  SMTP_PORT: z.coerce.number().default(587),
+  // Fix: z.coerce.boolean() converts "false" to true. We need manual transform.
+  SMTP_SECURE: z.string().default("false").transform(val => val === "true"), // false for port 587, true for 465
+  SMTP_USER: z.string(), // Gmail address
+  SMTP_PASSWORD: z.string(), // Gmail app password
+  EMAIL_FROM: z.string(),
 });
 
 export type env = z.infer<typeof EnvSchema>;
