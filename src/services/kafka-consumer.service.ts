@@ -53,7 +53,7 @@ export class KafkaConsumerService {
 
           // Route messages based on event-type header
           const eventType = message.headers?.["event-type"]?.toString();
-          
+
           if (eventType === "auth.otp.generated") {
             await this.otpHandler.handle(payload);
           }

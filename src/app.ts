@@ -1,7 +1,6 @@
 import type { Application, NextFunction, Request, Response } from "express";
 
 import { STATUS_CODES } from "@ahammedijas/fleet-os-shared";
-import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 
@@ -11,7 +10,6 @@ export default function createApp(): Application {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
   app.use(express.json());
 
   app.use((req: Request, _res: Response, next: NextFunction) => {
